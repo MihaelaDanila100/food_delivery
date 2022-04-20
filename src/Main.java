@@ -1,26 +1,24 @@
-import pachetLocaluri.Restaurante;
-import pachetProduse.Bauturi;
-import pachetProduse.Preparate;
-import pachetUsers.ComenziRestaurante;
-import pachetUsers.Useri;
+import products.Dish;
+import pubs.Restaurant;
+import services.Service;
+import services.ServiceClass;
+import users.RestaurantOrder;
+import users.User;
 
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        List<Useri> listaUtilizatori = new ArrayList<Useri>();
 
-        List<Preparate> preparateRestaurant = new ArrayList<Preparate>();
+        List<Dish> preparateRestaurant = new ArrayList<Dish>();
 
         List<String> listIngrediente = new ArrayList<String>();
         listIngrediente.add("piept de pui");
         listIngrediente.add("sare");
 
-        Preparate p = new Preparate("Piept de pui", 1, listIngrediente);
+        Dish p = new Dish("Piept de pui", 1, listIngrediente);
         preparateRestaurant.add(p);
-
-        Restaurante restaurant = new Restaurante("Restaurant SRL", "Bucuresti", "Bulevardul Iuliu Maniu", preparateRestaurant);
 
         Scanner keyboard = new Scanner(System.in);
 
@@ -42,13 +40,14 @@ public class Main {
         adresaUser = keyboard.nextLine().toString();
         adrseUser.add(adresaUser);
 
-        Useri newUser = new Useri(numeUser, prenumeUser, localitateUser, adrseUser);
-        Preparate comandaUser = new Preparate("piept de pui", 1);
-        List<Preparate> listComandaUser = new ArrayList<Preparate>();
+        User newUser = new User(numeUser, prenumeUser, localitateUser, adrseUser);
+        Dish comandaUser = new Dish("piept de pui", 1);
+        List<Dish> listComandaUser = new ArrayList<Dish>();
         listComandaUser.add(comandaUser);
 
-        ComenziRestaurante comandaUser1 = new ComenziRestaurante(new Date(System.currentTimeMillis()), 0, 0, listComandaUser);
+        RestaurantOrder comandaUser1 = new RestaurantOrder(new Date(System.currentTimeMillis()), 0, 0, listComandaUser);
 
-        preparateRestaurant.get(0).schimbaDisponibilitate();
+        ServiceClass s = new ServiceClass();
+        s.addOrderToHistory(comandaUser1, newUser);
     }
 }
