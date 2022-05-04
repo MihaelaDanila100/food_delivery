@@ -1,7 +1,7 @@
+import io.exceptions.FileReadingException;
+import io.exceptions.FileWritingException;
+import services.*;
 import products.Dish;
-import pubs.Restaurant;
-import services.Service;
-import services.ServiceClass;
 import users.RestaurantOrder;
 import users.User;
 
@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void etapa1(String[] args) {
 
         List<Dish> preparateRestaurant = new ArrayList<Dish>();
 
@@ -38,9 +38,8 @@ public class Main {
         System.out.println("Adresa: ");
         List<String> adrseUser = new ArrayList<String>();
         adresaUser = keyboard.nextLine().toString();
-        adrseUser.add(adresaUser);
 
-        User newUser = new User(numeUser, prenumeUser, localitateUser, adrseUser);
+        User newUser = new User(numeUser, prenumeUser, localitateUser, adresaUser);
         Dish comandaUser = new Dish("piept de pui", 1);
         List<Dish> listComandaUser = new ArrayList<Dish>();
         listComandaUser.add(comandaUser);
@@ -49,5 +48,16 @@ public class Main {
 
         ServiceClass s = new ServiceClass();
         s.addOrderToHistory(comandaUser1, newUser);
+    }
+
+    public static void main(String[] args) throws FileReadingException, FileWritingException {
+        CarSingletonService c = CarSingletonService.getInstance();
+        c.writeData();
+        DriverSingletonService d = DriverSingletonService.getInstance();
+        d.writeData();
+        UserSingletonService u = UserSingletonService.getInstance();
+        u.writeData();
+        Audit a = Audit.getInstance();
+        a.writeCSV();
     }
 }

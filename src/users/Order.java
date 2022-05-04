@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Order {
     protected static int id = 0;
+    protected int orderId;
     protected Date received;
     protected Date delivered;
     protected int idPub;
@@ -13,6 +14,8 @@ public class Order {
         this.received = receivingHour;
         this.idPub = pubId;
         this.idUser = userId;
+        this.orderId = id;
+        id += 1;
     }
 
     public void setDelivered(Date delivered) {

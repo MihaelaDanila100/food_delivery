@@ -10,16 +10,16 @@ public class Dish {
     private boolean disponibility;
 
     public Dish(String newName, int newQuantity){
-        this.name = name;
-        this.quantity = quantity;
+        this.name = newName;
+        this.quantity = newQuantity;
         this.ingredients = new ArrayList<>();
         disponibility = true;
     }
 
     public Dish(String newName, int newQuantity, List<String> newIngredients){
-        this.name = name;
-        this.quantity = quantity;
-        this.ingredients = ingredients;
+        this.name = newName;
+        this.quantity = newQuantity;
+        this.ingredients = newIngredients;
         disponibility = true;
     }
 
@@ -33,5 +33,11 @@ public class Dish {
 
     public void setQuantity(int q){
         this.quantity = q;
+    }
+
+    @Override
+    public String toString() {
+        return "Dish: " + name + '\'' + ", quantity=" + quantity + ", ingredients=" + ingredients +
+                ", disponibility=" + disponibility + "\n";
     }
 }

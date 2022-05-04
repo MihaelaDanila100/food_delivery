@@ -11,4 +11,9 @@ public class Pub {
         this.city = location;
         this.address = pubAddress;
     }
+
+    @Override
+    public String toString() {
+        return "Pub{" + name + '\'' + ", city='" + city + '\'' + ", address='" + address + '\'' + "}";
+    }
 }
