@@ -1,78 +1,104 @@
 package repository;
-
 import config.DatabaseConfig;
 import users.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
+import java.sql.*;
 import java.util.List;
 
 public class UserRepository {
 
-    public static void insertUser(String firstN, String lastN, String city, List<String> addresses) {
-        String insertPersonSql = "INSERT INTO User(FirstName, LastName, City, Addresses) VALUES(?, ?, ?, ?)";
+    public void createTable() {
+        String createTableSql = "CREATE TABLE IF NOT EXISTS users" +
+                "(userId int PRIMARY KEY AUTO_INCREMENT, firstName varchar(30), lastName varchar(30), city varchar(30), addresses varchar(100), orders varchar(100))";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, firstN);
-            preparedStatement.setDouble(2, lastN);
-            preparedStatement.setDouble(3, city);
-            preparedStatement.setDouble(3, addresses);
-            preparedStatement.executeUpdate();
+            Statement stmt = connection.createStatement();
+            stmt.execute(createTableSql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void deleteUser(int userId) {
-        String insertPersonSql = "DELETE FROM User WHERE idUser = ?";
+    public String getCityUser(int id){
+        String selectSql = "SELECT * FROM users where userId = ?";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, userId);
-            preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement = connection.prepareStatement(selectSql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery(selectSql);
+            return resultSet.getString(4);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return "-1";
     }
 
-    public static void updateUser(int userId, String firstN, String firstN, String city, List<String> addresses) {
-        String insertPersonSql = "UPDATE User SET FirstName = ?, LastName = ?, City = ?, Addresses = ? WHERE idUser = ?";
+    public void insertUser(User user) {
+        String insertPersonSql = "INSERT INTO users(firstName, lastName, city, addresses) VALUES(?, ?, ?, ?)";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
+
+        String firstN = user.getFirstName();
+        String lastN = user.getLastName();
+        String city = user.getCity();
+        List<String> addresses = user.getAddresses();
+        String adrese = "";
+        for(String adresa: addresses){
+            adrese = adrese + "," + adresa;
+        }
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
             preparedStatement.setString(1, firstN);
-            preparedStatement.setString(2, firstN);
+            preparedStatement.setString(2, lastN);
             preparedStatement.setString(3, city);
-            preparedStatement.setString(4, addresses);
-            preparedStatement.setString(5, userId);
+            preparedStatement.setString(4, adrese);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void getUser(int idUser) {
-        String insertPersonSql = "SELECT * FROM User where idUser = ?";
+
+    public void deletUser(int nr) {
+        String deleteUserSql = "DELETE FROM users WHERE userId = ?";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, idUser);
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteUserSql);
+            preparedStatement.setInt(1, nr);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+    public void updateUser(int id, String firstName, String lastName, String city, List<String> addresses) {
+        String deleteUserSql = "UPDATE users SET firstName = ?, lastName = ?, city = ?, addresses=? WHERE userId = ?";
+
+        Connection connection = DatabaseConfig.getDatabaseConnection();
+
+        String myAddress = "";
+        for(String a:addresses){
+            myAddress = myAddress + "," + a;
+        }
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteUserSql);
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, city);
+            preparedStatement.setString(4, myAddress);
+            preparedStatement.setInt(5, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -3,12 +3,23 @@ package repository;
 import config.DatabaseConfig;
 import logistics.Car;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CarRepository {
+
+    public void createTable() {
+        String createTableSql = "CREATE TABLE IF NOT EXISTS cars" +
+                "(carId int PRIMARY KEY AUTO_INCREMENT, name varchar(30), capacity double, disponibility tinyint)";
+
+        Connection connection = DatabaseConfig.getDatabaseConnection();
+
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.execute(createTableSql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void insertCar(String name, int capacity, double disponibility) {
         String insertPersonSql = "INSERT INTO Car(Name, Capacity, Disponibility) VALUES(?, ?, ?)";
@@ -25,7 +36,7 @@ public class CarRepository {
             e.printStackTrace();
         }
     }
-
+/*
     public static void deleteCar(int carId) {
         String insertPersonSql = "DELETE FROM Car WHERE idCar = ?";
 
@@ -69,6 +80,6 @@ public class CarRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }

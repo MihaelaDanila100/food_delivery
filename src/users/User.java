@@ -12,12 +12,14 @@ public class User {
     private List<Order> historyOrders;
     private List<Integer> coupons;
 
-    public User(String userName, String userLastName, String userCity, String adress) {
+    public User(String userName, String userLastName, String userCity, List<String> adresses) {
         this.firstName = userName;
         this.lastName = userLastName;
         this.city = userCity;
         this.addresses = new ArrayList<>();
-        this.addresses.add(adress);
+        for(String adresa: addresses){
+            this.addresses.add(adresa);
+        }
         historyOrders = new ArrayList<>();
         coupons = new ArrayList<>();
     }
@@ -30,5 +32,25 @@ public class User {
     public String toString() {
         return "User " + firstName + '\'' + " " + lastName + '\'' + ": city='" + city + '\'' + ", addresses="
                 + addresses +", historyOrders=" + historyOrders + ", coupons=" + coupons + "\n";
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public List<String> getAddresses() {
+        List<String> currentAddreses = new ArrayList<>();
+        for(String addresss:this.addresses){
+            currentAddreses.add(addresss);
+        }
+        return currentAddreses;
     }
 }

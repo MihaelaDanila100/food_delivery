@@ -12,4 +12,8 @@ public class BarOrder extends Order{
         super(received, idPub, idUser);
         this.drinks = dirnkList;
     }
+
+    public List<Drink> getDrinks() {
+        return this.drinks;
+    }
 }

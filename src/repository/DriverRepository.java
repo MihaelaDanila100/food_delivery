@@ -3,15 +3,26 @@ package repository;
 import config.DatabaseConfig;
 import logistics.Driver;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 import java.util.List;
 
 public class DriverRepository {
 
+    public void createTable() {
+        String createTableSql = "CREATE TABLE IF NOT EXISTS drivers" +
+                "(driverId int PRIMARY KEY AUTO_INCREMENT, name varchar(30), age int, city varchar(30), carId int, disponibility tinyint)";
+
+        Connection connection = DatabaseConfig.getDatabaseConnection();
+
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.execute(createTableSql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+/*
     public static void insertDriver(String name, int age, String city, int idCar) {
         String insertPersonSql = "INSERT INTO Driver(Name, Age, City, CarId) VALUES(?, ?, ?, ?)";
 
@@ -73,6 +84,6 @@ public class DriverRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }

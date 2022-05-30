@@ -30,7 +30,9 @@ public class UserSingletonService {
             while (line!=null) {
                 String[] fields = line.split(",");
                 for(int i = 0; i < fields.length; i += 4){
-                    User u = new User(fields[i], fields[i+1], fields[i+2], fields[i+3]);
+                    List<String> a = new ArrayList<>();
+                    a.add(fields[i+3]);
+                    User u = new User(fields[i], fields[i+1], fields[i+2], a);
                     myUsers.add(u);
                 }
                 line = in.readLine();

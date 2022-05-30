@@ -1,77 +1,94 @@
 package repository;
 
 import config.DatabaseConfig;
-import users.Order;
+import products.Drink;
+import users.BarOrder;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
+import java.sql.*;
+import java.util.List;
 
 public class OrdersRepository {
 
-    public static void insertOrder(Date received, Date delivered, int pubId, int userId) {
-        String insertPersonSql = "INSERT INTO Order(Recieve_date, Deliver_date, pubId, userId) VALUES(?, ?, ?, ?)";
+    public void createTable() {
+        String createTableSql = "CREATE TABLE IF NOT EXISTS orders" +
+                "(orderId int PRIMARY KEY AUTO_INCREMENT, drinks varchar(30))";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, received);
-            preparedStatement.setDouble(2, delivered);
-            preparedStatement.setDouble(3, pubId);
-            preparedStatement.setDouble(3, userId);
+            Statement stmt = connection.createStatement();
+            stmt.execute(createTableSql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void insertOrder(List<Drink> myDrinks) {
+        String insertOrder = "INSERT INTO orders(drinks) VALUES(?)";
+
+        Connection connection = DatabaseConfig.getDatabaseConnection();
+
+        String drinkNames = "";
+        for(Drink drink:myDrinks){
+            drinkNames = drinkNames + "," + drink.getName();
+        }
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(insertOrder);
+            preparedStatement.setString(1, drinkNames);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public String getDrinksFromOrder(int nr){
+        String selectSql = "SELECT * FROM order where orderId = ?";
+
+        Connection connection = DatabaseConfig.getDatabaseConnection();
+
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(selectSql);
+            preparedStatement.setInt(1, nr);
+            ResultSet resultSet = preparedStatement.executeQuery(selectSql);
+            return resultSet.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static void deleteOrder(int orderId) {
-        String insertPersonSql = "DELETE FROM Order WHERE idOrder = ?";
+        String deleteOrderSql = "DELETE FROM orders WHERE orderId = ?";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, orderId);
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteOrderSql);
+            preparedStatement.setInt(1, orderId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void updateOrder(int orderId, Date recieved,Date delivered, int idPub, boolean idUser) {
-        String insertPersonSql = "UPDATE Order SET Recieve_date = ?, Deliver_date = ?, pubId = ?, userId = ? WHERE orderId = ?";
+    public static void updateOrder(int orderId, List<Drink>drinks) {
+        String updateOrderSql = "UPDATE Order SET drinks = ? WHERE orderId = ?";
 
         Connection connection = DatabaseConfig.getDatabaseConnection();
 
+        String myDrinks = "";
+        for(Drink drink:drinks){
+            myDrinks = myDrinks + "," + drink.getName();
+        }
+
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, recieved);
-            preparedStatement.setString(2, delivered);
-            preparedStatement.setString(3, idPub);
-            preparedStatement.setString(4, idUser);
-            preparedStatement.setString(5, orderId);
+            PreparedStatement preparedStatement = connection.prepareStatement(updateOrderSql);
+            preparedStatement.setString(1, myDrinks);
+            preparedStatement.setInt(2, orderId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-    public static void getOrder(int idOrder) {
-        String insertPersonSql = "SELECT * FROM Order where orderId = ?";
-
-        Connection connection = DatabaseConfig.getDatabaseConnection();
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertPersonSql);
-            preparedStatement.setString(1, idOrder);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

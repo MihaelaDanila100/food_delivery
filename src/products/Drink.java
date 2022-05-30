@@ -21,4 +21,12 @@ public class Drink{
     public String toString() {
         return "Drink: " + name + '\'' + ", quantity=" + quantity + "\n";
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getQuanity() {
+        return this.quantity;
+    }
 }
