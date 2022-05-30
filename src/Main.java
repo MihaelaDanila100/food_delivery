@@ -1,9 +1,13 @@
 import io.exceptions.FileReadingException;
 import io.exceptions.FileWritingException;
+import logistics.Car;
 import services.*;
 import products.Dish;
 import users.RestaurantOrder;
 import users.User;
+import config.DatabaseConfig;
+import repository.CarRepository;
+
 
 import java.util.*;
 
@@ -59,5 +63,10 @@ public class Main {
         u.writeData();
         Audit a = Audit.getInstance();
         a.writeCSV();
+
+        CarRepository personRepositoryUsingCallableStatement = new CarRepository();
+        personRepositoryUsingCallableStatement.insertCar(new Car("Masina 1", 25));
+
+        DatabaseConfig.closeDatabaseConfiguration();
     }
 }
